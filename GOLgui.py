@@ -1,32 +1,12 @@
-#!/usr/bin/python
-from Tkinter import *
-root = Tk()
-gridsize = 100
-def populateGrid():
-	global grid
-	global grid1 
-	grid = {}
-	for num in range(gridsize):
-		grid1 = {}
-		for num1 in range(gridsize):
-			grid1.update({num1: 'false'})
-		grid.update({num: grid1})
+from turtle import *
 
-def populateGUI():
-	global cellFrame
-	cellFrame = {}
-	for num in range(gridsize):
-		cellFrame1 = {}
-		for num1 in range(gridsize):
-			cellFrame1.update({num1: 'false'})
-		cellFrame.update({num: cellFrame1})
+setup (width=200, height=200, startx=0, starty=0)
 
-	for column in range(gridsize):
-		colFrame = Frame(root)
-		colFrame.pack(side = "top")
-		for row in range(gridsize):
-			cellFrame[column][row] = Frame(colFrame, height=10,width=10, relief=RAISED, bd=2)
-			cellFrame[column][row].pack(side = "left")
+speed ("fastest") # important! turtle is intolerably slow otherwise
+tracer (False)    # This too: rendering the 'turtle' wastes time
 
-populateGUI()
-mainloop()
+for i in range(200):
+    forward(i)
+    right(90.5)
+
+done()
