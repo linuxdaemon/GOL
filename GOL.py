@@ -116,12 +116,12 @@ def CLI():
 def GUI():
 	populateGrid()
 	randomizeGrid()
-	while True:
-		tickGrid()
 	populateGUI()
 	updateGUI()
+	while True:
+		tickGrid()
 
-try:
+if sys.argv
 	if sys.argv[1] == "cli" or sys.argv[1] == "CLI":
 		CLI()
 	elif sys.argv[1] == "gui" or sys.argv[1] == "GUI":
