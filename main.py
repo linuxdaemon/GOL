@@ -1,29 +1,15 @@
 #!/usr/bin/env python3
 import os
 import random
-import sys
 import time
 
 import colorama
 
 colorama.init()
 
-try:
-    from Tkinter import *
-except ImportError:
-    try:
-        from tkinter import *
-    except ImportError:
-        GUI = False
-
 gridhsize = 50
 gridvsize = 50
 
-
-# try:
-#	root = Tk()
-# except:
-#	pass
 
 def populateGrid():
     global grid
@@ -35,22 +21,6 @@ def populateGrid():
             grid1.update({num1: False})
         grid.update({num: grid1})
 
-
-# def populateGUI():
-#	global cellFrame
-#	cellFrame = {}
-#	for num in range(gridhsize):
-#		cellFrame1 = {}
-#		for num1 in range(gridvsize):
-#			cellFrame1.update({num1: ' '})
-#		cellFrame.update({num: cellFrame1})
-#
-#	for column in range(gridhsize):
-#		colFrame = Frame(root)
-#		colFrame.pack(side = "top")
-#		for row in range(gridvsize):
-#			cellFrame[column][row] = Frame(colFrame, height=10,width=10, relief=RAISED, bd=2)
-#			cellFrame[column][row].pack(side = "left")
 
 def randomizeGrid():
     global grid
@@ -123,40 +93,14 @@ def tickGrid():
     showGrid()
 
 
-# def updateGUI():
-#	global cellFrame
-#	for column in range(gridhsize):
-#		for row in range(gridvsize):
-#			cellFrame[column][row].configure(background='black')
-
-def CLI():
-    # iterations = 0
+def main():
     populateGrid()
     randomizeGrid()
     showGrid()
     while True:
         tickGrid()
         time.sleep(.3)
-    # iterations += 1
-    # if iterations % 100 == 0:
 
 
-# def GUI():
-#	populateGrid()
-#	randomizeGrid()
-#	'''
-#	while True:
-#		tickGrid()
-#	'''
-#	populateGUI()
-#	mainloop()
-#	updateGUI()
-
-try:
-    if sys.argv[1] == "cli" or sys.argv[1] == "CLI":
-        CLI()
-    elif sys.argv[1] == "gui" or sys.argv[1] == "GUI":
-        GUI()
-except IndexError:
-    print("Usage: " + str(sys.argv[0]) + " (CLI/cli|GUI/gui)")
-    print(sys.argv[1])
+if __name__ == '__main__':
+    main()
