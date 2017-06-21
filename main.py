@@ -15,15 +15,6 @@ import colorama
 from colorama import Back, Fore
 
 
-def randomize_grid(grid):
-    grid_size = len(grid) * len(grid[0])
-    random1 = random.randint(0, grid_size)
-    for _ in range(random1):
-        column = random.choice(grid)
-        row = random.randint(0, len(column) - 1)
-        column[row] = True
-
-
 def display_grid(grid):
     lines = []
     for column in grid:
@@ -64,8 +55,7 @@ def tick_grid(grid):
 
 def main():
     colorama.init()
-    grid = [[False for _ in range(50)] for _ in range(50)]
-    randomize_grid(grid)
+    grid = [[random.choice((False, True)) for _ in range(50)] for _ in range(50)]
     while True:
         display_grid(grid)
         time.sleep(.3)
