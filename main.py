@@ -1,105 +1,75 @@
 #!/usr/bin/env python3
+# coding=utf-8
+"""
+Game of Life implementation
+Rules:
+    - Any cell with less than 2 neighbors or more than 3 dies
+    - Any dead cell with exactly 3 neighbors becomes alive
+"""
 import os
 import random
 import time
+from copy import deepcopy
 
 import colorama
-
-colorama.init()
-
-gridhsize = 50
-gridvsize = 50
+from colorama import Back, Fore
 
 
-def populateGrid():
-    global grid
-    global grid1
-    grid = {}
-    for num in range(gridhsize):
-        grid1 = {}
-        for num1 in range(gridvsize):
-            grid1.update({num1: False})
-        grid.update({num: grid1})
+def randomize_grid(grid):
+    grid_size = len(grid) * len(grid[0])
+    random1 = random.randint(0, grid_size)
+    for _ in range(random1):
+        column = random.choice(grid)
+        row = random.randint(0, len(column) - 1)
+        column[row] = True
 
 
-def randomizeGrid():
-    global grid
-    random1 = random.randint(0, gridhsize * gridvsize)
-    for num in range(random1):
-        column = random.randint(0, gridhsize - 1)
-        row = random.randint(0, gridvsize - 1)
-        grid[column][row] = True
-
-
-def remTrailWhite(text):
-    # Removes trailing whitespace
-    if text == gridhsize * "  ":
-        text = ""
-    elif text[-2:] == "  ":
-        text = remTrailWhite(text[:-2])
-    return text
-
-
-def optimizeText(rowText):
-    newText = ""
-    splitText = rowText.split("\n")
-    for text in splitText:
-        if text:
-            text = remTrailWhite(text)
-        newText += text + "\n"
-    return newText
-
-
-def showGrid():
+def display_grid(grid):
+    lines = []
+    for column in grid:
+        row_text = ""
+        for cell in column:
+            if cell:
+                row_text += Back.WHITE + Fore.WHITE + "  " + Back.RESET
+            else:
+                row_text += "  "
+        lines.append(row_text.rstrip())
     os.system('cls' if os.name == 'nt' else 'clear')
-    rowText = ""
-    for row in range(gridvsize):
-        for column in range(gridhsize):
-            if grid[column][row]:
-                rowText += colorama.Back.WHITE + colorama.Fore.WHITE + "  " + colorama.Back.RESET
-            elif not grid[column][row]:
-                rowText += "  "
-        rowText += "\n"
-    print(optimizeText(rowText))
+    print('\n'.join(lines), flush=True)
 
 
-def checkNeighbors(column, row):
+def check_neighbors(grid, column, row):
     neighbors = 0
-    values = [-1, 0, 1]
+    values = (-1, 0, 1)
     for x in values:
         for y in values:
-            if not (x == 0 and y == 0):
-                try:
-                    if grid[column + x][row + y]:
-                        neighbors += 1
-                except KeyError:
-                    pass
+            if not (x == 0 and y == 0) and 0 < column + x < len(grid) and 0 < row + y < len(grid[column + x]) and \
+                    grid[column + x][row + y]:
+                neighbors += 1
     return neighbors
 
 
-def tickGrid():
-    global grid
-    grid1 = grid
-    for column in range(gridhsize):
-        for row in range(gridvsize):
-            neighbors = checkNeighbors(column, row)
+def tick_grid(grid):
+    grid_cpy = deepcopy(grid)
+    for column in range(len(grid_cpy)):
+        for row in range(len(grid_cpy[column])):
+            neighbors = check_neighbors(grid_cpy, column, row)
             if neighbors < 2:
-                grid1[column][row] = False
+                grid[column][row] = False
             elif neighbors > 3:
-                grid1[column][row] = False
-            elif not (grid[column][row]) and neighbors == 3:
-                grid1[column][row] = True
-    grid = grid1
-    showGrid()
+                grid[column][row] = False
+            elif neighbors == 3:
+                grid[column][row] = True
 
 
 def main():
-    populateGrid()
-    randomizeGrid()
-    showGrid()
+    colorama.init()
+    grid = [[False for _ in range(50)] for _ in range(50)]
+    randomize_grid(grid)
     while True:
-        tickGrid()
+        display_grid(grid)
         time.sleep(.3)
+        tick_grid(grid)
 
 
 if __name__ == '__main__':
