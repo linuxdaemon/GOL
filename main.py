@@ -12,7 +12,8 @@ import time
 from copy import deepcopy
 
 import colorama
-from colorama import Back, Fore
+import sys
+from colorama import Back, Fore, colorama_text
 
 
 def display_grid(grid):
@@ -53,9 +54,13 @@ def tick_grid(grid):
                 grid[column][row] = True
 
 
+@colorama_text
 def main():
-    colorama.init()
-    grid = [[random.choice((False, True)) for _ in range(50)] for _ in range(50)]
+    rows = 50
+    columns = 50
+    if len(sys.argv) >= 3:
+        rows, columns = map(int, sys.argv[1:3])
+    grid = [[random.choice((False, True)) for _ in range(rows)] for _ in range(columns)]
     while True:
         display_grid(grid)
         time.sleep(.3)
